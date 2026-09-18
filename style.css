@@ -1,0 +1,117 @@
+* {
+    box-sizing: border-box;
+    font-family: 'Segoe UI', sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+.app-container {
+    display: flex;
+    height: 100vh;
+    overflow: hidden;
+}
+
+/* Sidebar styling */
+.sidebar {
+    width: 240px;
+    background: #f8f9fa;
+    border-right: 1px solid #e0e0e0;
+    padding: 20px;
+}
+
+.btn-primary {
+    width: 100%;
+    padding: 12px;
+    background: #1a73e8;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+/* Canvas Grid styling */
+.canvas-container {
+    flex: 1;
+    background-color: #f4f6f8;
+    background-image: radial-gradient(#dcdcdc 1px, transparent 1px);
+    background-size: 20px 20px;
+    position: relative;
+    overflow: auto;
+}
+
+/* Node UI Component */
+.node-card {
+    position: absolute;
+    width: 220px;
+    background: white;
+    border-radius: 6px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    border-top: 5px solid #1a73e8;
+    padding: 12px;
+    cursor: move;
+    z-index: 10;
+}
+
+.node-card.department {
+    border-top-color: #34a853;
+}
+
+.node-card.team {
+    border-top-color: #1a73e8;
+}
+
+/* Sidebar properties panel */
+.properties-panel {
+    width: 300px;
+    background: white;
+    border-left: 1px solid #e0e0e0;
+    padding: 20px;
+}
+
+.properties-panel label {
+    display: block;
+    margin: 12px 0 4px;
+    font-size: 14px;
+    color: #555;
+}
+
+.properties-panel input,
+.properties-panel select {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.btn-success {
+    width: 100%;
+    margin-top: 20px;
+    padding: 12px;
+    background: #34a853;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+/* DEPARTMENT -> Green Border */
+.node-card.department { 
+    border-top: 5px solid #34a853; 
+}
+
+/* TEAM -> Blue Border */
+.node-card.team { 
+    border-top: 5px solid #1a73e8; 
+}
+.node-card.role{
+    border-top: 5px solid #fbbc05;
+}
+
+/* Selected Node Highlight Effect */
+.node-card.selected {
+    border: 2px solid #1a73e8 !important; /* Bold Blue Border */
+    box-shadow: 0 0 12px rgba(26, 115, 232, 0.6) !important; /* Glowing Blue Shadow */
+    transform: scale(1.02); /* Thoda sa bada dikhega select hone par */
+    transition: all 0.2s ease;
+}

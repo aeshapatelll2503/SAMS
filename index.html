@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SAMS - Hierarchy Designer</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="app-container">
+        <aside class="sidebar">
+            <h2>SAMS</h2>
+            <button id="btn-create-node" class="btn-primary">+ Create New Node</button>
+            
+        </aside>
+
+        <main class="canvas-container" id="canvas">
+            <svg id="svg-canvas" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0;"></svg>
+            </main>
+
+        <aside class="properties-panel" id="properties-panel">
+    <h3>Properties</h3>
+    <form id="properties-form">
+        <input type="hidden" id="prop-id">
+        
+        <label>Node Name</label>
+        <input type="text" id="prop-name">
+        
+        <label>Node Type</label>
+        <select id="prop-type">
+            <option value="DEPARTMENT">DEPARTMENT</option>
+            <option value="TEAM">TEAM</option>
+            <option value="ROLE GROUP">ROLE GROUP</option>
+        </select>
+        
+        <label>Headcount Limit</label>
+        <input type="number" id="prop-limit">
+
+        <label>Status</label>
+        <select id="prop-status">
+            <option value="Active">Active</option>
+            <option value="Proposed">Proposed</option>
+        </select>
+
+        <button type="button" id="btn-save" class="btn-success">Save Changes</button>
+    </form>
+</aside>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>

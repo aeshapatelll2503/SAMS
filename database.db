@@ -1,0 +1,137 @@
+Database name : structurealauthoritymappingsystem
+
+CREATE TABLE users (
+    id INT(11) NOT NULL AUTO_INCREMENT,
+    full_name VARCHAR(100) NOT NULL,
+    email VARCHAR(100) NOT NULL UNIQUE,
+    password VARCHAR(255) NOT NULL,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    reset_token VARCHAR(255) DEFAULT NULL,
+    reset_expiry DATETIME DEFAULT NULL,
+    PRIMARY KEY (id)
+);
+
+
+
+CREATE TABLE hierarchy (
+    id VARCHAR(50) NOT NULL,
+    role_name VARCHAR(255) NOT NULL,
+    role_category VARCHAR(100) DEFAULT 'Executor',
+    visual_color VARCHAR(50) DEFAULT '#004ac6',
+    icon VARCHAR(50) NOT NULL,
+    description TEXT DEFAULT NULL,
+    parent_id VARCHAR(50) DEFAULT NULL,
+    pos_x INT(11) NOT NULL DEFAULT 100,
+    pos_y INT(11) NOT NULL DEFAULT 100,
+    PRIMARY KEY (id)
+);
+
+
+
+
+CREATE TABLE role (
+    id VARCHAR(50) NOT NULL,
+    hierarchy_id VARCHAR(50) DEFAULT NULL,
+    name VARCHAR(100) NOT NULL,
+    code VARCHAR(50) NOT NULL,
+    permissions LONGTEXT DEFAULT NULL,
+    description TEXT DEFAULT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    PRIMARY KEY (id),
+    KEY (hierarchy_id)
+);
+
+
+
+CREATE TABLE responsibility (
+    id VARCHAR(50) NOT NULL,
+    hierarchy_id VARCHAR(50) DEFAULT NULL,
+    role_id VARCHAR(50) DEFAULT NULL,
+    department VARCHAR(100) DEFAULT NULL,
+    owns TEXT DEFAULT NULL,
+    reviews TEXT DEFAULT NULL,
+    approves TEXT DEFAULT NULL,
+    escalates TEXT DEFAULT NULL,
+    status VARCHAR(50) DEFAULT 'Active',
+    alerts TEXT DEFAULT NULL,
+    description TEXT DEFAULT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (id),
+    KEY (hierarchy_id),
+    KEY (role_id)
+);
+
+
+CREATE TABLE decision_flow (
+    id VARCHAR(50) NOT NULL,
+    name VARCHAR(100) NOT NULL,
+    description TEXT DEFAULT NULL,
+    configuration LONGTEXT DEFAULT NULL,
+    is_active TINYINT(1) DEFAULT 1,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    PRIMARY KEY (id)
+);
+
+
+CREATE TABLE flow_node (
+    id VARCHAR(50) NOT NULL,
+    flow_id VARCHAR(50) NOT NULL,
+    hierarchy_id VARCHAR(50) DEFAULT NULL,
+    node_type VARCHAR(50) NOT NULL,
+    label VARCHAR(100) NOT NULL,
+    step_config LONGTEXT DEFAULT NULL,
+    visual_color VARCHAR(7) DEFAULT '#4d556b',
+    pos_x INT(11) DEFAULT 0,
+    pos_y INT(11) DEFAULT 0,
+    PRIMARY KEY (id),
+    KEY (flow_id),
+    KEY (hierarchy_id)
+);
+
+
+CREATE TABLE flow_edge (
+    id VARCHAR(50) NOT NULL,
+    flow_id VARCHAR(50) NOT NULL,
+    from_node_id VARCHAR(50) NOT NULL,
+    to_node_id VARCHAR(50) NOT NULL,
+    condition_logic LONGTEXT DEFAULT NULL,
+    label VARCHAR(100) DEFAULT NULL,
+    PRIMARY KEY (id),
+    KEY (flow_id),
+    KEY (from_node_id),
+    KEY (to_node_id)
+);
+
+
+
+CREATE TABLE version (
+    id VARCHAR(50) NOT NULL,
+    version_tag VARCHAR(20) NOT NULL,
+    target_type VARCHAR(50) NOT NULL,
+    target_id VARCHAR(50) NOT NULL,
+    snapshot_payload LONGTEXT NOT NULL,
+    remarks TEXT DEFAULT NULL,
+    created_by VARCHAR(100) DEFAULT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (id),
+    KEY (target_id),
+    KEY (version_tag)
+);
+
+
+
+CREATE TABLE change_log (
+    id BIGINT(20) NOT NULL AUTO_INCREMENT,
+    entity_name VARCHAR(50) NOT NULL,
+    entity_id VARCHAR(50) NOT NULL,
+    operation VARCHAR(10) NOT NULL,
+    pre_change_state LONGTEXT DEFAULT NULL,
+    post_change_state LONGTEXT DEFAULT NULL,
+    modified_by VARCHAR(100) DEFAULT NULL,
+    timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (id)
+);
+
+

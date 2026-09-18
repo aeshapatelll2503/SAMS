@@ -1,0 +1,49 @@
+{
+    "nodes": [
+        {
+            "id": "node_1784526624794_981",
+            "type": "Condition",
+            "label": "New Condition Option",
+            "x": 356,
+            "y": 107
+        },
+        {
+            "id": "node_1784526631096_783",
+            "type": "Approval",
+            "label": "New Approval Option",
+            "x": 687,
+            "y": 33
+        },
+        {
+            "id": "node_1784618033752_545",
+            "type": "Start",
+            "label": "New Start Option",
+            "x": 79,
+            "y": 110
+        },
+        {
+            "id": "node_1784770504431_848",
+            "type": "Stop",
+            "label": "New Stop Option",
+            "x": 696,
+            "y": 211
+        }
+    ],
+    "connections": [
+        {
+            "from": "node_1784526624794_981",
+            "to": "node_1784526631096_783",
+            "fromPort": "if"
+        },
+        {
+            "from": "node_1784618033752_545",
+            "to": "node_1784526624794_981",
+            "fromPort": "default"
+        },
+        {
+            "from": "node_1784526631096_783",
+            "to": "node_1784770504431_848",
+            "fromPort": "default"
+        }
+    ]
+}
