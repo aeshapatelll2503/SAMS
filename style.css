@@ -96,22 +96,32 @@
 }
 
 /* DEPARTMENT -> Green Border */
-.node-card.department { 
-    border-top: 5px solid #34a853; 
+.node-card.department {
+    border-top: 5px solid #34a853;
 }
 
 /* TEAM -> Blue Border */
-.node-card.team { 
-    border-top: 5px solid #1a73e8; 
+.node-card.team {
+    border-top: 5px solid #1a73e8;
 }
-.node-card.role{
+
+.node-card.role {
     border-top: 5px solid #fbbc05;
 }
 
 /* Selected Node Highlight Effect */
 .node-card.selected {
-    border: 2px solid #1a73e8 !important; /* Bold Blue Border */
-    box-shadow: 0 0 12px rgba(26, 115, 232, 0.6) !important; /* Glowing Blue Shadow */
-    transform: scale(1.02); /* Thoda sa bada dikhega select hone par */
+    border: 2px solid #1a73e8 !important;
+    /* Bold Blue Border */
+    box-shadow: 0 0 12px rgba(26, 115, 232, 0.6) !important;
+    /* Glowing Blue Shadow */
+    transform: scale(1.02);
+    /* Thoda sa bada dikhega select hone par */
     transition: all 0.2s ease;
+}
+
+
+ui {
+    color: yellow;
+    background-color: rebeccapurple;
 }
