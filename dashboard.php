@@ -27,8 +27,18 @@ try {
         }
     }
 
-    // users data count
+    // users data count and role distribution
     $usersCount = $pdo->query("SELECT COUNT(*) FROM users")->fetchColumn();
+    $roleStats = ['admin' => 0, 'manager' => 0, 'viewer' => 0];
+    try {
+        $roleStmt = $pdo->query("SELECT COALESCE(role, 'viewer') as role, COUNT(*) as cnt FROM users GROUP BY role");
+        while ($rRow = $roleStmt->fetch(PDO::FETCH_ASSOC)) {
+            $rKey = strtolower($rRow['role']);
+            if (isset($roleStats[$rKey])) {
+                $roleStats[$rKey] = (int)$rRow['cnt'];
+            }
+        }
+    } catch (Exception $e) {}
 
     // 5. Version History Extraction (Fetching ALL versions for view-all modal)
     $allActivities = [];
@@ -190,8 +200,9 @@ function time_ago($timestamp) {
         </div>
         
         <div class="flex items-center gap-md">
-            <div class="flex items-center gap-4 text-on-surface">
+            <div class="flex items-center gap-3 text-on-surface">
                 <span class="font-medium text-sm">Hi, <?php echo htmlspecialchars($_SESSION['user_name'] ?? 'User'); ?>!</span>
+                <?php echo render_role_badge(); ?>
                 <a href="./api/logout.php" class="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded text-sm font-medium transition-colors">Logout</a>
             </div>
         </div>
@@ -248,11 +259,34 @@ function time_ago($timestamp) {
         <main class="flex-1 overflow-y-auto p-margin-mobile md:p-margin-desktop bg-background custom-scrollbar">
             <header class="mb-lg flex flex-col md:flex-row md:items-end justify-between gap-md">
                 <div>
-                    <h1 class="font-headline-lg text-headline-lg font-bold text-on-surface">Welcome back</h1>
-                    <p class="font-body-lg text-body-lg text-secondary mt-xs">Here is an overview of your organizational structures.</p>
+                    <div class="flex items-center gap-3">
+                        <h1 class="font-headline-lg text-headline-lg font-bold text-on-surface">Welcome back, <?php echo htmlspecialchars($_SESSION['user_name'] ?? 'User'); ?></h1>
+                        <?php echo render_role_badge(); ?>
+                    </div>
+                    <p class="font-body-lg text-body-lg text-secondary mt-xs">
+                        <?php 
+                        $curRole = get_current_user_role();
+                        if ($curRole === 'admin') {
+                            echo "Admin Workspace &bull; You have full administrative control and management authority across all system modules.";
+                        } elseif ($curRole === 'manager') {
+                            echo "Manager Workspace &bull; You have authority to design hierarchies, map responsibilities, and configure decision flows.";
+                        } else {
+                            echo "Viewer Workspace &bull; You have read-only access to inspect organizational structures, mapped roles, and decision flows.";
+                        }
+                        ?>
+                    </p>
                 </div>
-                
             </header>
+
+            <?php if (is_viewer()): ?>
+            <div class="mb-lg p-md rounded-lg bg-emerald-50 dark:bg-emerald-950/30 border border-emerald-200 dark:border-emerald-800 text-emerald-900 dark:text-emerald-200 flex items-center justify-between shadow-sm">
+                <div class="flex items-center gap-sm">
+                    <span class="material-symbols-outlined text-[22px] text-emerald-600">visibility</span>
+                    <span class="text-sm"><strong>Viewer Mode:</strong> You are logged in with a standard email (read-only mode). To get Admin access use an <code>.admin@</code> email or for Manager use <code>.manager@</code> email.</span>
+                </div>
+                <span class="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-100 text-emerald-800 uppercase tracking-wider shrink-0">Read Only</span>
+            </div>
+            <?php endif; ?>
 
             <!-- Overview Cards Grid -->
             <section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-md mb-xl">
@@ -314,9 +348,10 @@ function time_ago($timestamp) {
                             <span class="material-symbols-outlined text-[20px]">groups</span>
                         </div>
                     </div>
-                    <div class="flex items-center gap-xs text-secondary text-label-md font-label-md">
-                        <span class="material-symbols-outlined text-[16px] text-[#16a34a]">trending_up</span>
-                        Registered users
+                    <div class="flex items-center justify-between text-[11px] pt-1.5 border-t border-outline-variant/50 font-medium">
+                        <span class="text-purple-600 font-semibold" title="Admin Accounts">Admin: <?php echo $roleStats['admin']; ?></span>
+                        <span class="text-blue-600 font-semibold" title="Manager Accounts">Mgr: <?php echo $roleStats['manager']; ?></span>
+                        <span class="text-emerald-600 font-semibold" title="Viewer Accounts">Viewer: <?php echo $roleStats['viewer']; ?></span>
                     </div>
                 </div>
             </section>

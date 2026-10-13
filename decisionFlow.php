@@ -1,3 +1,10 @@
+<?php
+require_once 'config.php';
+if (!isset($_SESSION['user_id'])) {
+    header("Location: login.php");
+    exit();
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -80,7 +87,9 @@
             </div>
             
             <div class="flex items-center gap-md">
-                <div class="flex items-center gap-4 text-on-surface">
+                <div class="flex items-center gap-3 text-on-surface">
+                    <span class="font-medium text-sm">Hi, <?php echo htmlspecialchars($_SESSION['user_name'] ?? 'User'); ?>!</span>
+                    <?php echo render_role_badge(); ?>
                     <a href="./api/logout.php" class="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded text-sm font-medium transition-colors">Logout</a>
                 </div>
             </div>

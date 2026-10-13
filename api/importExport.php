@@ -272,6 +272,11 @@ if ($method === 'GET') {
 // B. IMPORT DATA (POST)
 // ==========================================
 elseif ($method === 'POST') {
+    if (!can_edit()) {
+        echo json_encode(['success' => false, 'error' => 'Permission denied: Viewers cannot import configuration.']);
+        exit;
+    }
+
     if (!isset($_FILES['file']) || $_FILES['file']['error'] !== UPLOAD_ERR_OK) {
         echo json_encode(['success' => false, 'error' => 'File upload failed or no file selected.']);
         exit;

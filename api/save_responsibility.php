@@ -39,6 +39,10 @@ function logRoleMapperVersion($pdo, $remarks) {
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    if (!can_edit()) {
+        echo json_encode(['success' => false, 'message' => 'Permission denied: Viewers have read-only access.']);
+        exit;
+    }
     $responsibility_id = $_POST['responsibility_id'] ?? '';
     $hierarchy_id = $_POST['role'] ?? ''; 
     $department = $_POST['department'] ?? 'General';

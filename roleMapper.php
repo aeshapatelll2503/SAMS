@@ -1,23 +1,29 @@
 <?php
-// आपके पास मौजूद config.php को शामिल करें
+
 require_once 'config.php';
+
+// Login check
+if (!isset($_SESSION['user_id'])) {
+    header("Location: login.php");
+    exit();
+}
 
 $roles_dropdown = [];
 $departments_dropdown = [];
 $all_responsibilities = [];
 
 try {
-    // 1. PDO का उपयोग करके hierarchy टेबल से डेटा निकालें (यहाँ role_category को जोड़ा गया है)
+    
     $hierarchy_result = $pdo->query("SELECT id, role_name, role_category FROM hierarchy WHERE role_name IS NOT NULL AND role_name != ''");
     while($row = $hierarchy_result->fetch(PDO::FETCH_ASSOC)) {
         $roles_dropdown[] = $row;
-        // अब यहाँ role_category का डेटा मिलेगा और array में पुश होगा
+       
         if(!empty($row['role_category']) && !in_array($row['role_category'], $departments_dropdown)) {
             $departments_dropdown[] = $row['role_category'];
         }
     }
 
-    // 2. responsibility टेबल से डेटा निकालें
+  
     $table_query = "SELECT r.*, h.role_name FROM responsibility r LEFT JOIN hierarchy h ON r.hierarchy_id = h.id ORDER BY r.created_at DESC";
     $table_result = $pdo->query($table_query);
     $all_responsibilities = $table_result->fetchAll(PDO::FETCH_ASSOC);
@@ -83,8 +89,9 @@ try {
             <input class="w-full pl-xl pr-md py-sm bg-surface-container-low border border-outline-variant rounded focus:border-primary focus:ring-1 focus:ring-primary focus:outline-none transition-all font-mono-md text-mono-md placeholder:text-on-surface-variant" placeholder="Search nodes..." type="text">
         </div>
         <div class="flex items-center gap-md">
-            
-            <div class="flex items-center gap-4 text-on-surface">
+            <div class="flex items-center gap-3 text-on-surface">
+                <span class="font-medium text-sm">Hi, <?php echo htmlspecialchars($_SESSION['user_name'] ?? 'User'); ?>!</span>
+                <?php echo render_role_badge(); ?>
                 <a href="./api/logout.php" class="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded text-sm font-medium transition-colors">Logout</a>
             </div>
         </div>
@@ -138,10 +145,21 @@ try {
 
         <main class="flex-1 overflow-y-auto p-margin-mobile md:p-margin-desktop bg-background custom-scrollbar">
             <div class="flex flex-wrap justify-between items-center gap-md mb-lg">
-                <div class="flex items-center gap-sm"></div>
+                <div class="flex items-center gap-sm">
+                    <?php if (is_viewer()): ?>
+                    <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-md text-xs font-medium bg-emerald-50 text-emerald-800 border border-emerald-200">
+                        <span class="material-symbols-outlined text-[16px]">visibility</span>
+                        Viewer Mode &bull; Read-Only Access
+                    </span>
+                    <?php endif; ?>
+                </div>
+                <?php if (!is_viewer()): ?>
                 <button onclick="openAddModal()" class="bg-primary-container text-on-primary py-sm px-md rounded-DEFAULT font-label-md font-medium hover:bg-primary-fixed-variant transition-colors flex items-center gap-xs shadow-sm">
                     <span class="material-symbols-outlined text-[18px]">add</span>Add Responsibility
                 </button>
+                <?php else: ?>
+                <span class="text-xs text-secondary italic">Changes restricted to Admin and Manager</span>
+                <?php endif; ?>
             </div>
 
             <div class="bg-surface-container-lowest rounded-lg border border-outline-variant shadow-sm overflow-hidden flex flex-col">
@@ -212,6 +230,7 @@ $isActive = ($row['status'] ?? '') === "Active";
     </td>
 
     <td class="p-md text-center">
+        <?php if (!is_viewer()): ?>
         <div class="flex items-center justify-center gap-sm">
             <button onclick="openEditModal('<?= $row['id'] ?>', '<?= htmlspecialchars($row['hierarchy_id']) ?>')" class="text-primary hover:text-primary-container transition-colors flex items-center" title="Edit">
                 <span class="material-symbols-outlined text-[20px]">edit</span>
@@ -220,6 +239,9 @@ $isActive = ($row['status'] ?? '') === "Active";
                 <span class="material-symbols-outlined text-[20px]">delete</span>
             </button>
         </div>
+        <?php else: ?>
+        <span class="text-xs text-secondary italic">View Only</span>
+        <?php endif; ?>
     </td>
 </tr>
 
