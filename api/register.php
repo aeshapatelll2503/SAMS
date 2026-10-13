@@ -39,18 +39,25 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         
         $hashedPassword = password_hash($plainPassword, PASSWORD_DEFAULT);
 
-       
-        $sql = "INSERT INTO users (full_name, email, password) VALUES (:full_name, :email, :password)";
+        // Determine user role based on email:
+        // xyz12.admin@gmail.com -> admin
+        // xyz12.manager@gmail.com -> manager
+        // xyz12@gmail.com (simple email) -> viewer
+        $role = get_role_from_email($email);
+
+        $sql = "INSERT INTO users (full_name, email, role, password) VALUES (:full_name, :email, :role, :password)";
         $stmt = $pdo->prepare($sql);
         
         $stmt->execute([
             'full_name' => $fullName,
             'email' => $email,
+            'role' => $role,
             'password' => $hashedPassword
         ]);
 
+        $roleLabel = ucfirst($role);
         echo "<script>
-                alert('Account created successfully!');
+                alert('Account created successfully as {$roleLabel}!');
                 window.location.href = '../login.php';
               </script>";
               

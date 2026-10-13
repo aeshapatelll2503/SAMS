@@ -183,7 +183,16 @@
                         <label class="font-label-md text-label-md text-on-surface" for="email">Email Address</label>
                         <input
                             class="font-body-md text-body-md bg-surface-container-lowest border border-outline-variant rounded-lg px-md py-sm w-full text-on-surface placeholder:text-outline focus:outline-none focus:ring-1 focus:ring-primary-container focus:border-primary-container transition-all"
-                            id="email" placeholder="name@company.com" required type="email" name="email">
+                            id="email" placeholder="xyz12@gmail.com, xyz12.admin@..., xyz12.manager@..." required type="email" name="email">
+                        
+                        <!-- Role preview indicator -->
+                        <div id="loginRoleBox" class="mt-1.5 p-2 rounded-lg bg-surface-container-low border border-outline-variant flex items-center justify-between text-xs transition-all">
+                            <div class="flex items-center gap-2">
+                                <span id="loginRoleDot" class="w-2.5 h-2.5 rounded-full bg-emerald-500 transition-colors"></span>
+                                <span class="text-secondary" id="loginRoleText">Role: <strong id="loginRoleName" class="text-emerald-700 dark:text-emerald-400 font-semibold">Viewer</strong></span>
+                            </div>
+                            <span id="loginRoleBadge" class="px-2 py-0.5 rounded text-[11px] font-mono bg-emerald-100 text-emerald-800 border border-emerald-300">Read-Only</span>
+                        </div>
                     </div>
 
                     <!-- Password Field -->

@@ -86,6 +86,53 @@ if (passwordToggle) {
     });
   }
 
+  // Real-time Role Detection on Email Input
+  const emailInput = document.getElementById("email");
+  const rolePill = document.getElementById("rolePill");
+  const roleIcon = document.getElementById("roleIcon");
+  const roleLabel = document.getElementById("roleLabel");
+  const roleDesc = document.getElementById("roleDesc");
+
+  function detectRole(email) {
+    const emailLower = email.trim().toLowerCase();
+    const localPart = emailLower.split('@')[0] || '';
+    if (localPart === 'admin' || /(^|\.)admin(\.|$)/i.test(localPart)) {
+      return 'admin';
+    }
+    if (localPart === 'manager' || /(^|\.)manager(\.|$)/i.test(localPart)) {
+      return 'manager';
+    }
+    return 'viewer';
+  }
+
+  function updateRoleUI() {
+    if (!emailInput || !rolePill) return;
+    const role = detectRole(emailInput.value);
+
+    rolePill.className = "role-pill";
+    if (role === 'admin') {
+      rolePill.classList.add('role-pill-admin');
+      if (roleIcon) roleIcon.textContent = 'shield';
+      if (roleLabel) roleLabel.textContent = 'Admin Role';
+      if (roleDesc) roleDesc.textContent = 'Admin email detected — Full administrative & editing permissions.';
+    } else if (role === 'manager') {
+      rolePill.classList.add('role-pill-manager');
+      if (roleIcon) roleIcon.textContent = 'manage_accounts';
+      if (roleLabel) roleLabel.textContent = 'Manager Role';
+      if (roleDesc) roleDesc.textContent = 'Manager email detected — Hierarchy design & role mapping permissions.';
+    } else {
+      rolePill.classList.add('role-pill-viewer');
+      if (roleIcon) roleIcon.textContent = 'visibility';
+      if (roleLabel) roleLabel.textContent = 'Viewer Role';
+      if (roleDesc) roleDesc.textContent = 'Simple email detected — Standard read-only viewing permissions.';
+    }
+  }
+
+  if (emailInput) {
+    emailInput.addEventListener("input", updateRoleUI);
+    updateRoleUI();
+  }
+
   // Form Validation
   const form = document.getElementById("registrationForm");
 

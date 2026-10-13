@@ -59,6 +59,12 @@ switch ($method) {
         break;
 
     case 'POST':
+        if (!can_edit()) {
+            http_response_code(403);
+            echo json_encode(['status' => 'error', 'message' => 'Permission denied: Viewers have read-only access.']);
+            exit;
+        }
+
         $input = file_get_contents('php://input');
         $data = json_decode($input, true);
 

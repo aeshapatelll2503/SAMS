@@ -21,10 +21,22 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
        
         if ($user && password_verify($plainPassword, $user['password'])) {
             
-          
+            // Detect role from email format and database
+            $detectedRole = get_role_from_email($user['email']);
+            $userRole = !empty($user['role']) ? strtolower($user['role']) : $detectedRole;
+
+            // Sync database if role was empty or if email pattern changed
+            if (empty($user['role']) || ($user['role'] === 'viewer' && $detectedRole !== 'viewer') || ($detectedRole !== 'viewer' && $user['role'] !== $detectedRole)) {
+                $updateRoleStmt = $pdo->prepare("UPDATE users SET role = :role WHERE id = :id");
+                $updateRoleStmt->execute(['role' => $detectedRole, 'id' => $user['id']]);
+                $userRole = $detectedRole;
+            }
+
             $_SESSION['user_id'] = $user['id'];
             $_SESSION['user_name'] = $user['full_name'];
             $_SESSION['user_email'] = $user['email'];
+            $_SESSION['user_role'] = $userRole;
+            $_SESSION['role'] = $userRole;
 
             // Open the new page (Dashboard)
             header("Location: ../dashboard.php");

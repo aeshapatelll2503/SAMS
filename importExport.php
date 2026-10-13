@@ -1,3 +1,10 @@
+<?php
+require_once 'config.php';
+if (!isset($_SESSION['user_id'])) {
+    header("Location: login.php");
+    exit();
+}
+?>
 <!DOCTYPE html>
 <html class="light" lang="en">
 
@@ -133,7 +140,9 @@
             <input class="w-full pl-xl pr-md py-sm bg-surface-container-low border border-outline-variant rounded focus:border-primary focus:ring-1 focus:ring-primary focus:outline-none transition-all font-mono-md text-mono-md placeholder:text-on-surface-variant" placeholder="Search structures, roles, or nodes..." type="text">
         </div>
         <div class="flex items-center gap-md">
-            <div class="flex items-center gap-4 text-on-surface">
+            <div class="flex items-center gap-3 text-on-surface">
+                <span class="font-medium text-sm">Hi, <?php echo htmlspecialchars($_SESSION['user_name'] ?? 'User'); ?>!</span>
+                <?php echo render_role_badge(); ?>
                 <a href="./api/logout.php" class="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded text-sm font-medium transition-colors">Logout</a>
             </div>
         </div>
@@ -205,6 +214,13 @@
                         </div>
                         <p class="font-body-md text-body-md text-on-surface-variant mb-lg">Upload configuration files to restore or build structural nodes.</p>
                         
+                        <?php if (is_viewer()): ?>
+                        <div class="mb-md p-3 rounded-lg bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs flex items-center gap-2">
+                            <span class="material-symbols-outlined text-[18px] text-emerald-600">visibility</span>
+                            <span>Viewer Mode: Configuration importing is restricted to Admin & Manager accounts. You can still export configurations on the right.</span>
+                        </div>
+                        <?php endif; ?>
+
                         <div class="flex-1 border-2 border-dashed border-outline-variant rounded-lg bg-surface flex flex-col items-center justify-center p-xl transition-colors hover:bg-surface-container-low cursor-pointer min-h-[240px]" id="drop-zone">
                             <input type="file" id="file-input" accept=".json,.yaml" class="hidden" />
                             <span class="material-symbols-outlined text-outline text-[48px] mb-md">cloud_upload</span>

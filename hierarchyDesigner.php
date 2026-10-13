@@ -1,3 +1,10 @@
+<?php
+require_once 'config.php';
+if (!isset($_SESSION['user_id'])) {
+    header("Location: login.php");
+    exit();
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -164,8 +171,9 @@
             <input class="w-full pl-xl pr-md py-sm bg-surface-container-low border border-outline-variant rounded focus:border-primary focus:ring-1 focus:ring-primary focus:outline-none transition-all font-mono-md text-mono-md placeholder:text-on-surface-variant" placeholder="Search nodes..." type="text">
         </div>
         <div class="flex items-center gap-md">
-            
-            <div class="flex items-center gap-4 text-on-surface">
+            <div class="flex items-center gap-3 text-on-surface">
+                <span class="font-medium text-sm">Hi, <?php echo htmlspecialchars($_SESSION['user_name'] ?? 'User'); ?>!</span>
+                <?php echo render_role_badge(); ?>
                 <a href="./api/logout.php" class="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded text-sm font-medium transition-colors">Logout</a>
             </div>
         </div>
@@ -181,10 +189,17 @@
                         <h2 class="font-title-md text-title-md font-bold text-on-surface leading-tight">Structural Authority</h2>
                     </div>
                 </div>
+                <?php if (!is_viewer()): ?>
                 <button id="create-node-btn" class="relative z-50 mt-md w-full bg-primary-container text-on-primary py-sm px-md rounded-DEFAULT font-label-md text-label-md font-medium hover:bg-primary-fixed-variant transition-colors flex items-center justify-center gap-xs">
                     <span class="material-symbols-outlined text-[18px]">add</span>
                     Create New Node
                 </button>
+                <?php else: ?>
+                <div class="mt-md p-2 rounded bg-emerald-50 text-emerald-800 border border-emerald-200 text-center text-xs font-medium flex items-center justify-center gap-1">
+                    <span class="material-symbols-outlined text-[15px]">visibility</span>
+                    Viewer Mode (Read-Only)
+                </div>
+                <?php endif; ?>
             </div>
             <nav class="flex-1 py-md">
                 <ul class="flex flex-col">

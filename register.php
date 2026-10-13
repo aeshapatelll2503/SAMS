@@ -36,7 +36,29 @@
                 <!-- Email Address -->
                 <div class="form-group">
                     <label for="email" class="form-label">Email Address</label>
-                    <input type="email" id="email" name="email" class="form-input" placeholder="john@example.com" required autocomplete="email">
+                    <input type="email" id="email" name="email" class="form-input" placeholder="e.g. xyz12@gmail.com, xyz12.admin@..., xyz12.manager@..." required autocomplete="email">
+                    
+                    <!-- Dynamic Role Indicator -->
+                    <div id="rolePreviewBox" class="role-indicator-container">
+                        <div class="role-pill role-pill-viewer" id="rolePill">
+                            <span class="material-symbols-outlined text-[16px]" id="roleIcon">visibility</span>
+                            <span id="roleLabel">Viewer Role</span>
+                        </div>
+                        <span class="role-desc-text" id="roleDesc">Simple email will register as Viewer (Read-only access)</span>
+                    </div>
+
+                    <!-- Role Guide Chips -->
+                    <div class="role-guide-chips">
+                        <span class="role-chip" title="Regular email defaults to Viewer">
+                            <span class="chip-dot dot-viewer"></span> xyz12@gmail.com &rarr; <strong>Viewer</strong>
+                        </span>
+                        <span class="role-chip" title="Add .admin before @ for Admin">
+                            <span class="chip-dot dot-admin"></span> xyz12.admin@gmail.com &rarr; <strong>Admin</strong>
+                        </span>
+                        <span class="role-chip" title="Add .manager before @ for Manager">
+                            <span class="chip-dot dot-manager"></span> xyz12.manager@gmail.com &rarr; <strong>Manager</strong>
+                        </span>
+                    </div>
                 </div>
                 <!-- Password -->
                 <div class="form-group">

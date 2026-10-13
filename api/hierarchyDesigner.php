@@ -70,6 +70,14 @@ if ($method === 'GET') {
 
 elseif ($method === 'POST') {
 
+    if (!can_edit()) {
+        echo json_encode([
+            'success' => false,
+            'error'   => 'Permission denied: Viewers have read-only access.'
+        ]);
+        exit();
+    }
+
     $input  = json_decode(file_get_contents('php://input'), true);
     $action = $input['action'] ?? '';
 
